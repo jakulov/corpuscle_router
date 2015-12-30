@@ -53,20 +53,23 @@ class ApiRouter implements RouterInterface
         }
 
         $id = null;
-        $action = 'list';
+        $action = RouteResult::ACTION_LIST;
         if(isset($pathParts[1])) {
             $id = $pathParts[1];
-            $action = 'show';
+            $action = RouteResult::ACTION_SHOW;
         }
 
         if(isset($pathParts[2])) {
-            if($method === 'POST') {
+            $action = $pathParts[2];
+            if($action === RouteResult::ACTION_DELETE && $method !== 'POST') {
                 return $routeResult;
             }
-            $action = $pathParts[2];
+            elseif($action !== RouteResult::ACTION_DELETE && $method === 'POST') {
+                return $routeResult;
+            }
         }
         elseif ($method === 'POST') {
-            $action = $id === null ? 'create' : 'edit';
+            $action = $id === null ? RouteResult::ACTION_CREATE : RouteResult::ACTION_EDIT;
         }
 
         $routeResult->controller = $controller;

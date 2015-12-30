@@ -104,10 +104,28 @@ class ApiRouterTest extends PHPUnit_Framework_TestCase
         }
 
         $request = \Symfony\Component\HttpFoundation\Request::create('/any/any/url', 'PUT', ['data' => 'foo']);
-
         $result = $router->route($request);
-
         $this->assertEquals(true, $result->isNotFound());
+    }
+
+    public function testRouteDelete()
+    {
+        $config = [
+            '/object' => 'ObjectController',
+        ];
+
+        $router = new \jakulov\Corpuscle\Router\ApiRouter();
+        $router->setConfig($config);
+
+        $request = \Symfony\Component\HttpFoundation\Request::create('/object/id/delete', 'GET', ['data' => 'foo']);
+        $result = $router->route($request);
+        $this->assertEquals(true, $result->isNotFound());
+
+        $request = \Symfony\Component\HttpFoundation\Request::create('/object/id/delete', 'POST', ['data' => 'foo']);
+        $result = $router->route($request);
+        $this->assertEquals('ObjectController', $result->controller, 'Testing Controller DELETE action');
+        $this->assertEquals('delete', $result->action, 'Testing ACTION DELETE action');
+        $this->assertEquals('id', $result->id, 'Testing ID DELETE action');
     }
 
 

@@ -11,6 +11,12 @@ class RouteResult
     public $action;
     public $id;
 
+    const ACTION_LIST = 'list';
+    const ACTION_SHOW = 'show';
+    const ACTION_CREATE = 'create';
+    const ACTION_EDIT = 'edit';
+    const ACTION_DELETE = 'delete';
+
     /**
      * @return bool
      */
